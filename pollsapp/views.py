@@ -18,8 +18,10 @@ def detail(request, question_id):
 
 
 def results(request, question_id):
-    response = f"You're looking at the results of question {question_id}."
-    return HttpResponse(response)
+    q = get_object_or_404(Question, pk=question_id)
+    temp = 'polls/results.html'
+    ctx = {'question': q}
+    return render(request, temp, ctx)
 
 
 def vote(request, question_id):
@@ -36,6 +38,6 @@ def vote(request, question_id):
         selected_choice.votes += 1
         selected_choice.save()
 
-        return HttpResponseRedirect(reverse('polls:results', args=(question_id)))
+        return HttpResponseRedirect(reverse('polls:results', args=(question_id,)))
 
     return HttpResponse(f"You're voting on question {question_id}.")
