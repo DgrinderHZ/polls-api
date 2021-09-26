@@ -1,17 +1,15 @@
 from .models import Choice, Question
 from django.contrib import admin
 
+# class ChoiceInline(admin.StackedInline):
+class ChoiceInline(admin.TabularInline):
+    model = Choice
+    extra = 2
 
-class QuestionModel(admin.ModelAdmin):
+
+class QuestionAdmin(admin.ModelAdmin):
     fields = ['question_text', 'pub_date']
+    inlines = [ChoiceInline]
 
 
-class ChoiceModel(admin.ModelAdmin):
-    fieldsets = [
-        ('Choice information', {'fields': ['choice_text', 'votes']}),
-        ('Question information', {'fields': ['question']}),
-    ]
-
-
-admin.site.register(Question, QuestionModel)
-admin.site.register(Choice, ChoiceModel)
+admin.site.register(Question, QuestionAdmin)
