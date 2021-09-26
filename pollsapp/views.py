@@ -3,6 +3,7 @@ from pollsapp.models import Choice, Question
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
+from django.utils import timezone as tz
 
 
 class IndexListView(generic.ListView):
@@ -12,8 +13,12 @@ class IndexListView(generic.ListView):
 
     # Overide to perform the order_by
     def get_queryset(self):
-        """Return the last five published questions."""
-        return Question.objects.order_by('-pub_date')[:5]
+        """Return the last five published questions.
+           Except those set for future publication.
+        """
+        return Question.objects.filter(
+            pub_date__lte=tz.now()
+        ).order_by('-pub_date')[:5]
 
 
 class DetailView(generic.DetailView):
