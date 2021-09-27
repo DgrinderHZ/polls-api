@@ -1,15 +1,10 @@
 from django.urls import path
-from . import views
-
+from .apiviews import QuestionList, QuestionDetail
 
 
 app_name = 'pollsapi'
 urlpatterns = [
-    path('polls/', views.IndexListView.as_view(), name='index'),
-    path('polls/<int:pk>/',
-         views.DetailView.as_view(), name='detail'),
-    path('polls/<int:pk>/results/',
-         views.ResultsView.as_view(), name='results'),
-    path('polls/<int:question_id>/vote/', views.vote, name='vote'),
-
+    path('api/polls/', QuestionList.as_view(), name='polls_list'),
+    path('api/polls/<int:pk>/',
+         QuestionDetail.as_view(), name='polls_detail'),
 ]
