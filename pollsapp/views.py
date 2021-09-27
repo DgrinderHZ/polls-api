@@ -1,10 +1,13 @@
 from django.http.response import HttpResponseRedirect
-from pollsapp.models import Choice, Question
+from pollsapp.models import Choice, Question, Vote
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone as tz
+from django.contrib.auth import get_user_model
 
+
+User = get_user_model()
 
 class IndexListView(generic.ListView):
     template_name = 'polls/index.html'
@@ -46,7 +49,7 @@ class ResultsView(generic.DetailView):
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     try:
-        selected_choice = question.choice_set.get(pk=request.POST['choice'])
+        selected_choice = question.choices.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         ctx = {
             'question': question,
@@ -54,8 +57,13 @@ def vote(request, question_id):
         }
         return render(request, 'polls/detail.html', ctx)
     else:
-        selected_choice.votes += 1
+        selected_choice.tally += 1
         selected_choice.save()
+        # Create the vote
+        vote = Vote()
+        vote.question = question
+        vote.choice = selected_choice
+        vote.voted_by = request.user
 
         return HttpResponseRedirect(
             reverse('polls:results', args=(question_id,)))
