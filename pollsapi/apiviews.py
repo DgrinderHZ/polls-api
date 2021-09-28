@@ -11,6 +11,8 @@ from pollsapp.models import Question, Choice
 
 
 class UserCreate(generics.CreateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
     serializer_class = UserSerializer
 
 

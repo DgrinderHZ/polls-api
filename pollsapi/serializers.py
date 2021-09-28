@@ -1,4 +1,4 @@
-from django.db.models.base import Model
+from rest_framework.authtoken.models import Token
 from rest_framework.serializers import ModelSerializer
 
 
@@ -47,4 +47,5 @@ class UserSerializer(ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
+        Token.objects.create(user=user)
         return user
