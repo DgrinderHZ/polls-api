@@ -1,11 +1,12 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 from .apiviews import ChoiceList, QuestionList, \
-     QuestionDetail, VoteCreate, QuestionChoiceList, PollViewSet
+     QuestionDetail, UserCreate, VoteCreate, QuestionChoiceList, PollViewSet
 
 
 app_name = 'pollsapi'
 urlpatterns = [
+     path('api/users/', UserCreate.as_view(), name='user_create'),
     path('api/polls/', QuestionList.as_view(), name='pollsapi_list'),
     path('api/polls/<int:pk>/',
          QuestionDetail.as_view(), name='pollsapi_detail'),

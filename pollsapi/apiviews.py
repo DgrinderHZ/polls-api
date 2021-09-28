@@ -4,9 +4,14 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 
-from .serializers import ChoiceSerializer, PollSerializer, QuestionSerializer, VoteSerializer
+from .serializers import ChoiceSerializer, PollSerializer,\
+     QuestionSerializer, VoteSerializer, UserSerializer
 
 from pollsapp.models import Question, Choice
+
+
+class UserCreate(generics.CreateAPIView):
+    serializer_class = UserSerializer
 
 
 class QuestionList(generics.ListCreateAPIView):
@@ -49,6 +54,7 @@ class QuestionChoiceList(generics.ListCreateAPIView):
         querset = Choice.objects.filter(question_id=self.kwargs['pk'])
         return querset
     serializer_class = ChoiceSerializer
+
 
 # variant4: viewsets.ModelViewSet
 class PollViewSet(viewsets.ModelViewSet):
