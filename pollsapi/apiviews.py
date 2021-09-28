@@ -1,9 +1,10 @@
-from rest_framework import generics, status
+from pollsapi.models import Poll
+from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 
-from .serializers import ChoiceSerializer, QuestionSerializer, VoteSerializer
+from .serializers import ChoiceSerializer, PollSerializer, QuestionSerializer, VoteSerializer
 
 from pollsapp.models import Question, Choice
 
@@ -23,6 +24,7 @@ class ChoiceList(generics.ListCreateAPIView):
     serializer_class = ChoiceSerializer
 
 
+# variant2: APIView subclasses
 class VoteCreate(APIView):
     serializer_class = VoteSerializer
 
@@ -41,8 +43,14 @@ class VoteCreate(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
+# variant3: generics.* subclasses
 class QuestionChoiceList(generics.ListCreateAPIView):
     def get_queryset(self):
         querset = Choice.objects.filter(question_id=self.kwargs['pk'])
         return querset
     serializer_class = ChoiceSerializer
+
+# variant4: viewsets.ModelViewSet
+class PollViewSet(viewsets.ModelViewSet):
+    queryset = Poll.objects.all()
+    serializer_class = PollSerializer
