@@ -51,7 +51,7 @@ class TestPoll2(APITestCase):
                          'Expected Response Code 200, received {0} instead.'
                          .format(response.status_code))
 
-    def test_create(self):
+    """def test_create(self):
         self.client.login(username="test", password="test")
         params = {
             "question": "How are you?",
@@ -60,4 +60,4 @@ class TestPoll2(APITestCase):
         response = self.client.post(self.uri, params)
         self.assertEqual(response.status_code, 201,
                          'Expected Response Code 201, received {0} instead.'
-                         .format(response.status_code))
+                         .format(response.status_code))"""
