@@ -4,6 +4,8 @@ from .apiviews import ChoiceList, QuestionList, \
      QuestionDetail, UserCreate, UserLoginView, \
      VoteCreate, QuestionChoiceList, PollViewSet
 from rest_framework_swagger.views import get_swagger_view
+from rest_framework.documentation import include_docs_urls
+from django.views.generic import TemplateView
 
 
 schema_view = get_swagger_view(title='Polls API')
@@ -22,7 +24,7 @@ urlpatterns = [
      ),
      path('api/polls/<int:pk>/choices/',
           QuestionChoiceList.as_view(), name='pollsapi_qstn_choice_list'),
-     path(r'swagger-docs/', schema_view),
+     path(r'api/docs/', schema_view),
 ]
 
 # For viewsets
