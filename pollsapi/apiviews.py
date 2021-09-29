@@ -76,7 +76,7 @@ class QuestionChoiceList(generics.ListCreateAPIView):
     serializer_class = ChoiceSerializer
 
 
-# variant4: viewsets.ModelViewSet
+# variant4: viewsets.ModelViewSet, CRUD
 class PollViewSet(viewsets.ModelViewSet):
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
