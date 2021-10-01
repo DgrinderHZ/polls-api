@@ -48,12 +48,13 @@ class TestPoll2(APITestCase):
     def setUp(self):
         self.user = self.setup_user()
         self.token = Token.objects.create(user=self.user)
-        self.view = apiviews.PollViewSet.as_view({'get': 'list'})
+        self.token.save()
+
         self.uri = '/api/pollset/'
         self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_list2(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.client.login(username="test", password="test")
         response = self.client.get(self.uri)
         self.assertEqual(response.status_code, 200,
@@ -61,6 +62,7 @@ class TestPoll2(APITestCase):
                          .format(response.status_code))
 
     def test_create(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.client.login(username="test", password="test")
         params = {
             "question": "How are you?",
