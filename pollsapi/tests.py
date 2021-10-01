@@ -1,5 +1,4 @@
 from pollsapp.models import User
-from django.utils import timezone
 from rest_framework.test import APIClient, APITestCase, APIRequestFactory
 from rest_framework.authtoken.models import Token
 from . import apiviews
@@ -13,7 +12,7 @@ class TestPoll(APITestCase):
 
         self.factory = APIRequestFactory()
         self.view = apiviews.PollViewSet.as_view({'get': 'list'})
-        self.uri = '/polls/'
+        self.uri = '/api/pollset/'
 
     @staticmethod
     def setup_user():
@@ -38,11 +37,21 @@ class TestPoll(APITestCase):
 
 
 class TestPoll2(APITestCase):
+    @staticmethod
+    def setup_user():
+        return User.objects.create(
+            username='test',
+            email='test@test.test',
+            password='test'
+        )
+
     def setUp(self):
-        self.client = APIClient()
-        self.factory = APIRequestFactory()
+        self.user = self.setup_user()
+        self.token = Token.objects.create(user=self.user)
         self.view = apiviews.PollViewSet.as_view({'get': 'list'})
-        self.uri = '/polls/'
+        self.uri = '/api/pollset/'
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_list2(self):
         self.client.login(username="test", password="test")
@@ -51,13 +60,13 @@ class TestPoll2(APITestCase):
                          'Expected Response Code 200, received {0} instead.'
                          .format(response.status_code))
 
-    """def test_create(self):
+    def test_create(self):
         self.client.login(username="test", password="test")
         params = {
             "question": "How are you?",
-            "created_by": 1
+            "created_by": 1,
             }
-        response = self.client.post(self.uri, params)
+        response = self.client.post(self.uri, params, format='json')
         self.assertEqual(response.status_code, 201,
                          'Expected Response Code 201, received {0} instead.'
-                         .format(response.status_code))"""
+                         .format(response.status_code))
